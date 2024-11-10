@@ -262,7 +262,7 @@
         // Fetch Weather Information
         function fetchWeather() {
             const city = document.getElementById('locationInput').value;
-            const apiKey = 'cce75fddfd74808d911331172a6620bd';
+            const apiKey = 'process.env.OPENWEATHER_API_KEY';
             if (city) {
                 fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
                     .then(response => response.json())
@@ -281,7 +281,7 @@
 
         // Fetch YouTube Videos
         function fetchYouTubeVideos(topic) {
-            const apiKey = 'AIzaSyCIuKPXvDN83ydLyEr5LxgHakBBM7ydPR8';
+            const apiKey = 'process.env.GOOGLE_API_KEY';
             fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${topic}&key=${apiKey}`)
                 .then(response => response.json())
                 .then(data => {
