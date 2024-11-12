@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Profile Card Customization</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('twitter-logo.png');
+            background-color: black;
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            width: 100%;
+            background-color: white;
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar ul li {
+            display: inline;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .navbar ul li a:hover {
+            color: #1da1f2;
+        }
+
+        .navbar ul li a::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background-color: #1da1f2;
+            transition: width 0.3s;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .navbar ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Profile Card Styles */
+        .profile-card {
+            width: 300px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 150px auto;
+        }
+
+        /* Dark Theme */
+        .dark-theme {
+            background-color: rgba(51, 51, 51, 0.9);
+            color: white;
+        }
+
+        /* Customization Section */
+        #customize {
+            margin-top: 20px;
+            text-align: center;
+            color: #333;
+            padding: 20px;
+            border: 2px solid #1da1f2;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgb(179, 190, 196);
+        }
+
+        /* Container */
+        .container {
+            margin-top: 70px;
+        }
+
+        /* Button Styles */
+        #search-bar button,
+        #customize button,
+        #weatherInfo button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(135deg, #1da1f2, #1a91da);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #search-bar button:hover,
+        #customize button:hover,
+        #weatherInfo button:hover {
+            background: linear-gradient(135deg, #1a91da, #1da1f2);
+            transform: translateY(-2px);
+        }
+
+        #search-bar button:active,
+        #customize button:active,
+        #weatherInfo button:active {
+            transform: translateY(0);
+        }
+
+        /* Style for customization elements */
+        #customize input[type="color"],
+        #customize select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Style for recent tweets */
+        #recentTweets ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        /* YouTube Videos List */
+        #videosList iframe {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <ul>
+            <li><a href="#search">Search</a></li>
+            <li><a href="#customize">Customize</a></li>
+            <li><a href="#theme" onclick="toggleTheme()">Toggle Theme</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <!-- Search Bar -->
+        <div id="search-bar">
+            <input type="text" id="twitterUsername" placeholder="Enter Twitter username">
+            <button onclick="fetchProfile()">Search</button>
+        </div>
+
+        <!-- Profile Card -->
+        <div id="profileCard" class="profile-card">
+            <img src="https://via.placeholder.com/100" id="profileImage" alt="Profile Image"
+                style="width: 100px; height: 100px; border-radius: 50%; border: 2px solid #1da1f2;">
+            <h2 id="username">@username</h2>
+            <h3 id="name">User Name</h3>
+            <p id="bio">This is a sample bio.</p>
+            <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+                <div>
+                    <h4 id="followersCount">100</h4>
+                    <p>Followers</p>
+                </div>
+                <div>
+                    <h4 id="followingCount">150</h4>
+                    <p>Following</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Tweets Section -->
+        <div id="recentTweets" style="margin-top: 20px;">
+            <h3>Recent Tweets</h3>
+            <ul id="tweetsList"></ul>
+        </div>
+
+        <!-- Customization Section -->
+        <div id="customize">
+            <h3>Customize Profile Card</h3>
+            <label for="bgColorPicker">Background Color:</label>
+            <input type="color" id="bgColorPicker" onchange="changeBackgroundColor()">
+            <br><br>
+            <label for="fontStylePicker">Font Style:</label>
+            <select id="fontStylePicker" onchange="changeFontStyle()">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+            <br><br>
+            <label for="borderStylePicker">Border Style:</label>
+            <select id="borderStylePicker" onchange="changeBorderStyle()">
+                <option value="solid">Solid</option>
+                <option value="dotted">Dotted</option>
+                <option value="dashed">Dashed</option>
+            </select>
+            <br><br>
+            <button onclick="resetCustomizations()">Reset Customizations</button>
+        </div>
+
+        <!-- Weather Info Section -->
+        <div id="weatherInfo" style="margin-top: 20px;">
+            <input type="text" id="locationInput" placeholder="Enter City">
+            <button onclick="fetchWeather()">Get Weather</button>
+            <div id="weatherDisplay"></div>
+        </div>
+
+        <!-- YouTube Videos Section -->
+        <div id="videosList" style="margin-top: 20px;">
+            <h3>Latest Technology Videos</h3>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const WEATHER_API_KEY = process.env.OPENWEATHER_API_KEY; // Replace with your actual OpenWeather API key
+        const YOUTUBE_API_KEY = process.env.GOOGLE_API_KEY; // Your YouTube API key
+
+        // Fetch Twitter Profile and Recent Tweets
+        function fetchProfile() {
+            const username = document.getElementById('twitterUsername').value;
+            if (username) {
+                document.getElementById('profileImage').src = "https://via.placeholder.com/100";
+                document.getElementById('username').textContent = '@' + username;
+                document.getElementById('name').textContent = 'Sample Name';
+                document.getElementById('bio').textContent = 'This is a dynamic bio fetched from Twitter.';
+                document.getElementById('followersCount').textContent = '200';
+                document.getElementById('followingCount').textContent = '180';
+
+                // Placeholder for tweets
+                const tweets = ["Sample tweet #1", "Sample tweet #2"];
+                const tweetsList = document.getElementById('tweetsList');
+                tweetsList.innerHTML = '';
+                tweets.forEach(tweet => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = tweet;
+                    tweetsList.appendChild(listItem);
+                });
+            } else {
+                alert('Please enter a Twitter username.');
+            }
+        }
+
+        // Fetch Weather Information
+        function fetchWeather() {
+            const city = document.getElementById('locationInput').value;
+            if (city) {
+                fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}&units=metric`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const weather = `Temperature: ${data.main.temp}°C, ${data.weather[0].description}`;
+                        document.getElementById('weatherDisplay').textContent = weather;
+                    })
+                    .catch(error => {
+                        document.getElementById('weatherDisplay').textContent = 'Unable to fetch weather data.';
+                        console.error(error);
+                    });
+            } else {
+                alert('Please enter a city name.');
+            }
+        }
+
+        // Fetch YouTube Videos
+        function fetchYouTubeVideos(topic) {
+            fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${topic}&key=${YOUTUBE_API_KEY}`)
+                .then(response => response.json())
+                .then(data => {
+                    const videosList = document.getElementById('videosList');
+                    videosList.innerHTML = '';
+                    data.items.forEach(item => {
+                        const videoFrame = document.createElement('iframe');
+                        videoFrame.src = `https://www.youtube.com/embed/${item.id.videoId}`;
+                        videoFrame.width = '200';
+                        videoFrame.height = '150';
+                        videosList.appendChild(videoFrame);
+                    });
+                })
+                .catch(error => {
+                    document.getElementById('videosList').textContent = 'Unable to fetch videos.';
+                    console.error(error);
+                });
+        }
+
+        // Apply Customizations
+        function changeBackgroundColor() {
+            const bgColor = document.getElementById('bgColorPicker').value;
+            document.getElementById('profileCard').style.backgroundColor = bgColor;
+        }
+
+        function changeFontStyle() {
+            const fontStyle = document.getElementById('fontStylePicker').value;
+            document.getElementById('profileCard').style.fontFamily = fontStyle;
+        }
+
+        function changeBorderStyle() {
+            const borderStyle = document.getElementById('borderStylePicker').value;
+            document.getElementById('profileCard').style.border = `2px ${borderStyle} #1da1f2`;
+        }
+
+        function resetCustomizations() {
+            document.getElementById('profileCard').style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            document.getElementById('profileCard').style.fontFamily = 'Arial';
+            document.getElementById('profileCard').style.border = 'none';
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            document.getElementById('profileCard').classList.toggle('dark-theme');
+        }
+
+        // Load YouTube videos on page load
+        fetchYouTubeVideos('Latest Technology');
+    </script>
+</body>
+
+</html>
