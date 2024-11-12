@@ -265,6 +265,10 @@
         // Fetch Weather Information
         function fetchWeather() {
             const city = document.getElementById('locationInput').value;
+<<<<<<< HEAD:public/index.html
+=======
+            const apiKey = process.env.OPENWEATHER_API_KEY;
+>>>>>>> 0e0e010319936c32980006f65449c365a5cd664e:index.html
             if (city) {
                 fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}&units=metric`)
                     .then(response => response.json())
@@ -283,7 +287,12 @@
 
         // Fetch YouTube Videos
         function fetchYouTubeVideos(topic) {
+<<<<<<< HEAD:public/index.html
             fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${topic}&key=${YOUTUBE_API_KEY}`)
+=======
+            const apiKey = 'AIzaSyCIuKPXvDN83ydLyEr5LxgHakBBM7ydPR8';
+            fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${topic}&key=${apiKey}`)
+>>>>>>> 0e0e010319936c32980006f65449c365a5cd664e:index.html
                 .then(response => response.json())
                 .then(data => {
                     const videosList = document.getElementById('videosList');
