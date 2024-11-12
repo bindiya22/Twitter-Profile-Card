@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twitter Profile & Weather App</title>
+    <title>Twitter Profile Card</title>
     <style>
         /* Basic Styles */
         body {
@@ -49,14 +49,6 @@
             background-color: #0056b3;
         }
 
-        /* Profile and Weather Display */
-        .profile-card, #weatherDisplay {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 4px;
-            background-color: #f0f0f0;
-        }
-
         .profile-card img {
             width: 80px;
             height: 80px;
@@ -64,7 +56,7 @@
             margin-bottom: 10px;
         }
 
-        .profile-card h2, .profile-card h3, .profile-card p, #weatherDisplay h3, #weatherDisplay p {
+        .profile-card h2, .profile-card h3, .profile-card p{
             margin: 5px 0;
         }
     </style>
@@ -82,14 +74,9 @@
             <img src="" id="profileImage" alt="Profile Image">
             <h2 id="username">@username</h2>
             <h3 id="name">User Name</h3>
-            <p id="bio">This is a sample bio.</p>c
-        </div>
-
-        <!-- Weather Section -->
-        <div id="weather-section">
-            <input type="text" id="locationInput" placeholder="Enter City">
-            <button onclick="fetchWeather()">Get Weather</button>
-            <div id="weatherDisplay"></div>
+            <p id="bio">This is a sample bio.</p>
+            <p>Followers:</p><p id="followers">followers</p>
+            <p>Following:</p><p id="following">following</p>
         </div>
     </div>
 
@@ -113,40 +100,14 @@
                 document.getElementById('username').textContent = '@' + profileData.username;
                 document.getElementById('name').textContent = profileData.name;
                 document.getElementById('bio').textContent = profileData.bio;
+                document.getElementById('followers').textContent=profileData.followersCount;
+                document.getElementById('following').textContent=profileData.followingCount;
 
                 document.getElementById('profileCard').style.display = 'block';
 
             } catch (error) {
                 console.error('Error fetching profile:', error);
                 alert('Failed to fetch Twitter profile. Please try again.');
-            }
-        }
-
-        // Function to fetch Weather
-        async function fetchWeather() {
-            const city = document.getElementById('locationInput').value;
-            if (!city) {
-                alert('Please enter a city name.');
-                return;
-            }
-
-            try {
-                const response = await fetch(`http://localhost:3000/fetchWeather?city=${city}`);
-                if (!response.ok) throw new Error('City not found or server error');
-                
-                const weatherData = await response.json();
-
-                // Display weather information
-                document.getElementById('weatherDisplay').innerHTML = `
-                    <h3>Weather in ${weatherData.city}</h3>
-                    <p>Temperature: ${weatherData.temperature}°C</p>
-                    <p>Description: ${weatherData.description}</p>
-                    <img src="${weatherData.icon}" alt="Weather Icon">
-                `;
-
-            } catch (error) {
-                console.error('Error fetching weather data:', error);
-                alert('Failed to fetch weather data. Please try again.');
             }
         }
     </script>
